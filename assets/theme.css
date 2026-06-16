@@ -305,7 +305,22 @@ body {
 
 /* ── Data table card ─────────────────────────────────────────────────────── */
 .data-table-card { margin-bottom: var(--sp-8); }
-.table-title     { font-size: var(--fs-base); font-weight: 600; margin-bottom: var(--sp-2); }
+.table-title     { font-size: var(--fs-base); font-weight: 600; margin-bottom: 0; }
+
+/* ── Download CSV button ─────────────────────────────────────────────────── */
+.download-btn {
+  background: var(--wb-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 6px 14px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.download-btn:hover  { background: var(--wb-blue-dark); }
+.download-btn:active { background: var(--wb-blue-dark); }
 
 /* ── Overview page ───────────────────────────────────────────────────────── */
 .overview-content      { }

@@ -4,20 +4,20 @@ from dash import Input, Output, State, html
 from components.kpi_row import make_kpi_row
 from components.chart_grid import make_chart_grid
 from components.overview import make_overview
-from components import data_table
+from components.data_table import make_data_table
 from data.kpi_compute import compute_kpis
-from data.chart_builders import build_charts
+from data.chart_builders import build_charts, build_mini_charts
+from data.table_builder import build_table
 
 
-def _dim_page(view: str, values: dict = None, figures: dict = None):
-    return html.Div(
-        [
-            make_kpi_row(view, values),
-            html.Hr(className="section-divider"),
-            make_chart_grid(view, figures),
-            data_table.layout,
-        ]
-    )
+def _dim_page(view: str, values: dict = None, figures: dict = None,
+              table_columns=None, table_data=None):
+    return html.Div([
+        make_kpi_row(view, values),
+        html.Hr(className="section-divider"),
+        make_chart_grid(view, figures),
+        make_data_table(table_columns, table_data),
+    ])
 
 
 _VIEW_MAP = {
@@ -51,7 +51,7 @@ def register_layout_callbacks(app):
         State("sidebar-open",        "data"),
     )
 
-    # ── View switching + KPI + charts ────────────────────────────────────
+    # ── View switching + KPI + charts + table ────────────────────────────
     @app.callback(
         Output("page-content",       "children"),
         Output("current-view",       "data"),
@@ -80,14 +80,15 @@ def register_layout_callbacks(app):
         def tab_cls(tab_view):
             return "dim-tab dim-tab-active" if view == tab_view else "dim-tab"
 
-        values  = compute_kpis(view, scope, year_range)
-        figures = build_charts(view, scope, year_range)
+        values = compute_kpis(view, scope, year_range)
 
-        content = (
-            make_overview(values)
-            if view == "home"
-            else _dim_page(view, values, figures)
-        )
+        if view == "home":
+            mini_figures = build_mini_charts(scope, year_range)
+            content = make_overview(values, mini_figures)
+        else:
+            figures = build_charts(view, scope, year_range)
+            table_columns, table_data = build_table(view, scope, year_range)
+            content = _dim_page(view, values, figures, table_columns, table_data)
 
         return (
             content,

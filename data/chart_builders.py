@@ -261,6 +261,90 @@ def _institutions_charts(countries, yr_min, yr_max):
     return {"chart-institutions-a": fig_a, "chart-institutions-b": fig_b}
 
 
+# ── Mini chart helpers (Overview 2×2 grid) ────────────────────────────────────
+
+def _mini_base(**overrides) -> dict:
+    """Compact Plotly layout for Overview page mini charts (height=155)."""
+    layout = dict(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#F8FAFC",
+        font=dict(family="Segoe UI, Inter, Arial, sans-serif", size=10, color="#1A2332"),
+        margin=dict(l=40, r=10, t=10, b=30),
+        height=155,
+        showlegend=False,
+    )
+    layout.update(overrides)
+    return layout
+
+
+def build_mini_charts(scope: dict, year_range: list) -> dict:
+    """Return {mini_id: go.Figure} for the 2×2 Overview snapshot grid."""
+    countries = resolve_countries(scope)
+    if not countries or not year_range:
+        return {}
+
+    yr_min, yr_max = int(year_range[0]), int(year_range[1])
+    display = countries[:6]  # cap to 6 for legibility
+    results = {}
+
+    # access: national rate trend
+    df = _filt(load_access(), display, yr_min, yr_max)
+    if not df.empty:
+        fig = go.Figure()
+        for c in display:
+            cdf = df[df["country"] == c].sort_values("year")
+            fig.add_trace(go.Scatter(
+                x=cdf["year"], y=cdf["access_national_pct"].round(1),
+                mode="lines", name=c, line=dict(color=_country_color(c), width=1.5),
+            ))
+        fig.update_layout(**_mini_base(), xaxis=dict(**_AX), yaxis=dict(**_AX, range=[0, 105]))
+        results["mini-access"] = fig
+
+    # economics: residential tariff ¢/kWh
+    df = _filt(load_tariffs(), display, yr_min, yr_max)
+    if not df.empty:
+        fig = go.Figure()
+        for c in display:
+            cdf = df[df["country"] == c].sort_values("year")
+            fig.add_trace(go.Scatter(
+                x=cdf["year"], y=(cdf["residential_usd_kwh"] * 100).round(2),
+                mode="lines", name=c, line=dict(color=_country_color(c), width=1.5),
+            ))
+        fig.update_layout(**_mini_base(), xaxis=dict(**_AX), yaxis=dict(**_AX))
+        results["mini-economics"] = fig
+
+    # transition: renewable share %
+    df = _filt(load_transition(), display, yr_min, yr_max)
+    if not df.empty:
+        fig = go.Figure()
+        for c in display:
+            cdf = df[df["country"] == c].sort_values("year")
+            fig.add_trace(go.Scatter(
+                x=cdf["year"], y=cdf["renewable_share_pct"].round(1),
+                mode="lines", name=c, line=dict(color=_country_color(c), width=1.5),
+            ))
+        fig.update_layout(**_mini_base(), xaxis=dict(**_AX), yaxis=dict(**_AX, range=[0, 110]))
+        results["mini-transition"] = fig
+
+    # institutions: ownership donut (no year filter — one row per country)
+    sub = load_institutions()[lambda d: d["country"].isin(countries)]
+    if not sub.empty:
+        counts = sub["utility_ownership"].value_counts().reset_index()
+        counts.columns = ["ownership", "count"]
+        fig = go.Figure(go.Pie(
+            labels=counts["ownership"].str.capitalize(),
+            values=counts["count"],
+            hole=0.42,
+            marker_colors=[_OWN_COLOR.get(o, "#8A9BAC") for o in counts["ownership"]],
+            textinfo="label",
+            textfont=dict(size=9),
+        ))
+        fig.update_layout(**_mini_base(margin=dict(l=10, r=10, t=10, b=10)))
+        results["mini-institutions"] = fig
+
+    return results
+
+
 # ── Public entry point ────────────────────────────────────────────────────────
 
 def build_charts(view: str, scope: dict, year_range: list) -> dict:

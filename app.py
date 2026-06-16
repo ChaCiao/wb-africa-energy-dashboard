@@ -5,6 +5,7 @@ from dash import dcc, html
 from components import header, filter_rail, dimension_tabs
 from callbacks.filter_callbacks import register_filter_callbacks
 from callbacks.layout_callbacks import register_layout_callbacks
+from callbacks.data_callbacks import register_data_callbacks
 import data.loaders  # noqa: F401 – triggers CSV auto-generation on first run
 
 app = dash.Dash(
@@ -17,6 +18,7 @@ server = app.server
 
 register_filter_callbacks(app)
 register_layout_callbacks(app)
+register_data_callbacks(app)
 
 app.layout = dbc.Container(
     [
@@ -71,6 +73,9 @@ app.layout = dbc.Container(
         dcc.Store(id="sidebar-open",   data=True,   storage_type="session"),
         dcc.Store(id="current-view",   data="home", storage_type="session"),
         dcc.Store(id="selected-scope",              storage_type="session"),
+
+        # ── CSV download target (always in DOM) ───────────────────────
+        dcc.Download(id="download-csv"),
     ],
     fluid=True,
     className="app-container",
