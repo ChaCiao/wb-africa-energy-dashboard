@@ -10,9 +10,9 @@ layout = html.Div(
             dbc.Col(
                 html.Div(
                     [
-                        html.H1("WB Africa Energy Dashboard", className="header-title"),
+                        html.H1("Africa Energy Dashboard", className="header-title"),
                         html.P(
-                            f"Last updated: {_LAST_UPDATED}",
+                            f"Last update: {_LAST_UPDATED}",
                             className="header-subtitle",
                         ),
                     ],
