@@ -65,6 +65,18 @@ _VIEW_MAP = {
 
 def register_layout_callbacks(app):
 
+    # ── Show / hide focus-view chrome (back btn + compare dropdown) ──────
+    @app.callback(
+        Output("focus-back-btn",        "style"),
+        Output("compare-controls-wrapper", "style"),
+        Input("current-view", "data"),
+    )
+    def toggle_focus_chrome(view):
+        if view == "focus":
+            return ({"display": "block", "marginBottom": "8px"},
+                    {"display": "block", "maxWidth": "360px", "marginBottom": "12px"})
+        return {"display": "none"}, {"display": "none"}
+
     # ── Dark mode toggle — clientside, persisted in localStorage ────────
     app.clientside_callback(
         """

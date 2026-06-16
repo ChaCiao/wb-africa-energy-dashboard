@@ -97,14 +97,6 @@ def make_focus_page(country: str, kpis: dict, charts: dict, year_range: list):
     ], className="g-3")
 
     return html.Div([
-        # ── Back button ────────────────────────────────────────────────
-        html.Button(
-            "← Back to Overview",
-            id="focus-back-btn",
-            className="back-btn",
-            n_clicks=0,
-        ),
-
         # ── Country header ─────────────────────────────────────────────
         html.Div(
             [
@@ -136,16 +128,7 @@ def make_focus_page(country: str, kpis: dict, charts: dict, year_range: list):
 
         html.Hr(className="section-divider"),
 
-        # ── Country comparison ─────────────────────────────────────────
+        # ── Country comparison output (placeholder populated by callback) ──
         html.P("Compare with Another Country", className="section-label"),
-        html.Div([
-            dcc.Dropdown(
-                id="compare-dropdown",
-                options=[o for o in _COMPARE_OPTIONS if o["value"] != country],
-                placeholder="Select a country to compare…",
-                clearable=True,
-                className="compare-dropdown",
-            ),
-        ], className="compare-controls"),
         html.Div(id="compare-output"),
     ], className="focus-content")

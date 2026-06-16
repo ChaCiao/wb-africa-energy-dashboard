@@ -2,11 +2,8 @@
 Sprint 4-C: Export Report (HTML) + URL state sync.
 """
 from datetime import datetime
-from urllib.parse import urlencode, parse_qs, urlparse
-
 import pandas as pd
-import dash
-from dash import Input, Output, State, clientside_callback, no_update
+from dash import Input, Output, State, clientside_callback
 from dash.exceptions import PreventUpdate
 
 import config
@@ -112,15 +109,13 @@ def register_report_callbacks(app):
         filename  = f"africa_energy_{view or 'overview'}_{yr_str}.html"
         return dict(content=html_str, filename=filename, type="text/html")
 
-    # ── Write URL when view / year / scope changes (clientside) ──────────
+    # ── Write current view + tier to URL (one-directional, no restore) ───
     clientside_callback(
         """
-        function(view, year_range, scope) {
-            if (!view || !year_range) return window.location.search;
+        function(view, scope) {
+            if (!view) return window.location.search;
             var params = new URLSearchParams();
             params.set('view', view);
-            params.set('yr_min', year_range[0]);
-            params.set('yr_max', year_range[1]);
             if (scope && scope.tier) params.set('tier', scope.tier);
             var search = '?' + params.toString();
             if (window.history && window.history.replaceState) {
@@ -131,29 +126,5 @@ def register_report_callbacks(app):
         """,
         Output("url", "search"),
         Input("current-view",   "data"),
-        Input("year-slider",    "value"),
         Input("selected-scope", "data"),
     )
-
-    # ── Restore tier + year range from URL on initial load ───────────────
-    @app.callback(
-        Output("tier-radio",  "value"),
-        Output("year-slider", "value"),
-        Input("url", "search"),
-        prevent_initial_call=False,
-    )
-    def init_from_url(search):
-        if not search:
-            raise PreventUpdate
-        try:
-            params  = parse_qs(search.lstrip("?"))
-            tier    = params.get("tier",   [None])[0]
-            yr_min  = params.get("yr_min", [None])[0]
-            yr_max  = params.get("yr_max", [None])[0]
-            valid_tiers = {"tier1", "tier2", "tier3"}
-            t_out = tier if tier in valid_tiers else no_update
-            y_out = ([int(yr_min), int(yr_max)]
-                     if yr_min and yr_max else no_update)
-            return t_out, y_out
-        except Exception:
-            raise PreventUpdate

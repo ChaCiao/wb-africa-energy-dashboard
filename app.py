@@ -2,6 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
+import config
 from components import header, filter_rail, dimension_tabs
 from callbacks.filter_callbacks import register_filter_callbacks
 from callbacks.layout_callbacks import register_layout_callbacks
@@ -68,6 +69,25 @@ app.layout = dbc.Container(
                 html.Div(
                     [
                         dimension_tabs.layout,
+                                        # Back button lives here permanently (shown only in focus view)
+                        html.Button(
+                            "← Back to Overview",
+                            id="focus-back-btn",
+                            className="back-btn",
+                            n_clicks=0,
+                            style={"display": "none"},
+                        ),
+                        # Compare dropdown lives here permanently (shown only in focus view)
+                        html.Div([
+                            dcc.Dropdown(
+                                id="compare-dropdown",
+                                options=[{"label": c, "value": c}
+                                         for c in config.ALL_COUNTRIES],
+                                placeholder="Compare with another country…",
+                                clearable=True,
+                                className="compare-dropdown",
+                            ),
+                        ], id="compare-controls-wrapper", style={"display": "none"}),
                         dcc.Loading(
                             children=html.Div(id="page-content"),
                             type="dot",
