@@ -73,10 +73,11 @@ def _access_charts(countries, yr_min, yr_max):
             mode="lines+markers", name=country,
             line=dict(color=_country_color(country), width=2),
             marker=dict(size=5),
+            hovertemplate="<b>%{fullData.name}</b><br>Year: %{x}<br>Access: %{y:.1f}%<extra></extra>",
         ))
     fig_a.update_layout(
         **_base(),
-        xaxis=dict(**_AX),
+        xaxis=dict(**_AX, tickformat="d"),
         yaxis=dict(**_AX, range=[0, 105], title="Access Rate (%)"),
     )
 
@@ -84,9 +85,11 @@ def _access_charts(countries, yr_min, yr_max):
     avg = df.groupby("country")[["access_urban_pct", "access_rural_pct"]].mean().reset_index()
     fig_b = go.Figure([
         go.Bar(name="Urban", x=avg["country"],
-               y=avg["access_urban_pct"].round(1), marker_color="#0071BC"),
+               y=avg["access_urban_pct"].round(1), marker_color="#0071BC",
+               hovertemplate="<b>%{x}</b><br>Urban: %{y:.1f}%<extra></extra>"),
         go.Bar(name="Rural", x=avg["country"],
-               y=avg["access_rural_pct"].round(1), marker_color="#009FDA"),
+               y=avg["access_rural_pct"].round(1), marker_color="#009FDA",
+               hovertemplate="<b>%{x}</b><br>Rural: %{y:.1f}%<extra></extra>"),
     ])
     fig_b.update_layout(
         **_base(),
@@ -114,10 +117,11 @@ def _economics_charts(countries, yr_min, yr_max):
             mode="lines+markers", name=country,
             line=dict(color=_country_color(country), width=2),
             marker=dict(size=5),
+            hovertemplate="<b>%{fullData.name}</b><br>Year: %{x}<br>Tariff: %{y:.2f} ¢/kWh<extra></extra>",
         ))
     fig_a.update_layout(
         **_base(),
-        xaxis=dict(**_AX),
+        xaxis=dict(**_AX, tickformat="d"),
         yaxis=dict(**_AX, title="Tariff (¢/kWh)"),
     )
 
@@ -132,6 +136,7 @@ def _economics_charts(countries, yr_min, yr_max):
         marker_color=[_country_color(c) for c in avg["country"]],
         text=avg["cost_recovery_pct"].round(1).astype(str) + "%",
         textposition="outside",
+        hovertemplate="<b>%{y}</b><br>Cost Recovery: %{x:.1f}%<extra></extra>",
     ))
     fig_b.update_layout(
         **_base(margin=dict(l=90, r=65, t=24, b=30),
@@ -164,10 +169,11 @@ def _transition_charts(countries, yr_min, yr_max):
             marker=dict(size=4),
             fill=None if many else "tozeroy",
             opacity=0.75,
+            hovertemplate="<b>%{fullData.name}</b><br>Year: %{x}<br>Renewable Share: %{y:.1f}%<extra></extra>",
         ))
     fig_a.update_layout(
         **_base(),
-        xaxis=dict(**_AX),
+        xaxis=dict(**_AX, tickformat="d"),
         yaxis=dict(**_AX, range=[0, 110], title="Renewable Share (%)"),
     )
 
@@ -182,6 +188,7 @@ def _transition_charts(countries, yr_min, yr_max):
             name=_ENERGY_LABEL[col], x=countries,
             y=[round(v) for v in vals],
             marker_color=_ENERGY_COLOR[col],
+            hovertemplate=f"<b>%{{x}}</b><br>{_ENERGY_LABEL[col]}: %{{y:,.0f}} MW ({latest_yr})<extra></extra>",
         ))
     fig_b.update_layout(
         **_base(),

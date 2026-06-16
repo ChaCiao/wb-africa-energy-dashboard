@@ -269,15 +269,30 @@ body {
   margin-bottom: var(--sp-1);
 }
 .kpi-value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+.kpi-value-text {
   font-size: var(--fs-2xl);
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 2px;
 }
 .kpi-unit {
   font-size: var(--fs-xs);
   color: var(--text-muted);
 }
+
+/* ── KPI delta badge ─────────────────────────────────────────────────────── */
+.kpi-delta {
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.kpi-delta-up   { color: var(--accent-success); }
+.kpi-delta-down { color: var(--accent-danger); }
 
 /* ── Chart grid ──────────────────────────────────────────────────────────── */
 .chart-grid { margin-bottom: var(--sp-4); }

@@ -62,7 +62,12 @@ app.layout = dbc.Container(
                 html.Div(
                     [
                         dimension_tabs.layout,
-                        html.Div(id="page-content"),
+                        dcc.Loading(
+                            children=html.Div(id="page-content"),
+                            type="dot",
+                            color="#0071BC",
+                            delay_show=150,
+                        ),
                     ],
                     id="main-wrapper",
                     className="main-wrapper",
