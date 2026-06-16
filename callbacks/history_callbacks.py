@@ -48,7 +48,7 @@ def register_history_callbacks(app):
 
     # ── Navigate to Focus Country when a history chip is clicked ─────────
     @app.callback(
-        Output("map-click", "data"),
+        Output("map-click", "data", allow_duplicate=True),
         Input({"type": "history-btn", "index": ALL}, "n_clicks"),
         State("country-history", "data"),
         prevent_initial_call=True,
