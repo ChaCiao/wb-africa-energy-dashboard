@@ -549,3 +549,217 @@ body {
 }
 .history-btn:hover  { background: rgba(255,255,255,0.15); }
 .history-btn:active { background: rgba(255,255,255,0.22); }
+.history-empty { color: var(--text-muted); font-size: var(--fs-xs); margin: 0; }
+
+/* ── Dark mode toggle button ─────────────────────────────────────────────── */
+.dark-mode-btn {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-on-dark);
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: var(--border-radius);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.dark-mode-btn:hover  { background: rgba(255,255,255,0.18); }
+
+/* ── KPI trend-alert badge ───────────────────────────────────────────────── */
+.kpi-alert {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 1px 7px;
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
+.kpi-alert-up   { background: #D5F5E3; color: #1E8449; }
+.kpi-alert-down { background: #FADBD8; color: #922B21; }
+
+/* ── Pool summary cards ──────────────────────────────────────────────────── */
+.pool-card {
+  border: 1px solid var(--border-color);
+  border-top: 3px solid var(--wb-blue);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  background: var(--bg-card);
+  height: 100%;
+}
+.pool-header-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-1);
+}
+.pool-badge {
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 9px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.pool-count {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+.pool-full-name {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-3);
+}
+.pool-metrics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pool-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+}
+.pool-metric:last-child { border-bottom: none; padding-bottom: 0; }
+.pool-metric-label {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.pool-metric-val {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Country comparison panel ────────────────────────────────────────────── */
+.compare-controls {
+  margin-bottom: var(--sp-3);
+}
+.compare-dropdown { max-width: 360px; }
+.compare-card {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  border-radius: var(--border-radius);
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.compare-thead th {
+  background: #F0F4F8;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 2px solid var(--wb-blue);
+}
+.compare-table td { padding: 7px 12px; border-bottom: 1px solid var(--border-color); }
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-row-label { color: var(--text-secondary); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; }
+.compare-cell { font-weight: 600; font-variant-numeric: tabular-nums; }
+.compare-win  { color: #1E8449; background: #F0FBF4; }
+.compare-lose { color: #922B21; }
+.compare-pool-badge {
+  display: inline-block;
+  color: #fff;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DARK MODE
+   ══════════════════════════════════════════════════════════════════════════ */
+body.dark-mode {
+  --bg-app:         #0D1B2A;
+  --bg-card:        #1A2A3B;
+  --bg-sidebar:     #0A1525;
+  --bg-header:      #07111E;
+  --text-primary:   #E8EDF2;
+  --text-secondary: #A0B4C8;
+  --text-muted:     #6A8098;
+  --border-color:   #2A3D52;
+}
+
+body.dark-mode .compare-thead th { background: #1A2A3B; color: #E8EDF2; }
+body.dark-mode .compare-win      { background: #0D2A1A; color: #58D68D; }
+body.dark-mode .kpi-alert-up     { background: #0D2A1A; color: #58D68D; }
+body.dark-mode .kpi-alert-down   { background: #2A0D0D; color: #EC7063; }
+body.dark-mode .ranking-thead th { background: #004F8B; }
+body.dark-mode .welcome-box      { background: linear-gradient(135deg, #0A1525 0%, #050E18 100%); }
+body.dark-mode .pool-card        { background: var(--bg-card); }
+body.dark-mode .pool-metric      { border-bottom-color: #2A3D52; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE  (≤ 768 px)
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Auto-collapse sidebar */
+  .sidebar-wrapper          { width: 0 !important; min-width: 0 !important; }
+  .sidebar-arrow-btn        { display: none; }
+
+  /* Stack body vertically */
+  .body-row                 { flex-direction: column; }
+  .main-wrapper             { padding: var(--sp-3) var(--sp-3); }
+
+  /* KPI cards: 2-column grid */
+  .kpi-row > [class*="col-"] { flex: 0 0 50%; max-width: 50%; }
+
+  /* Charts: full width */
+  .chart-grid > [class*="col-"],
+  .g-3 > [class*="col-"]   { flex: 0 0 100%; max-width: 100%; }
+
+  /* Focus KPI cards: 2-column */
+  .focus-content .kpi-row > [class*="col-"] { flex: 0 0 50%; max-width: 50%; }
+
+  /* Header: stack title + buttons */
+  .app-header .row          { flex-direction: column; align-items: flex-start !important; gap: 8px; }
+  .header-btn-group         { gap: var(--sp-1); flex-wrap: wrap; }
+
+  /* Tabs: scroll horizontally */
+  .dim-tabs-bar             { overflow-x: auto; white-space: nowrap; }
+
+  /* Pool cards: single column */
+  .pool-card                { margin-bottom: var(--sp-3); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRINT  (@media print)
+   ══════════════════════════════════════════════════════════════════════════ */
+@media print {
+  /* Hide interactive chrome */
+  .mock-banner, .app-header, .sidebar-container,
+  .dim-tabs-bar, .sidebar-arrow-btn,
+  .download-btn, .export-btn, .back-btn,
+  .dark-mode-btn, .compare-controls   { display: none !important; }
+
+  /* Full width content */
+  .body-row, .main-wrapper            { display: block; width: 100%; padding: 0; }
+
+  /* Page breaks */
+  .section-divider                    { page-break-after: avoid; }
+  .kpi-row, .chart-grid               { page-break-inside: avoid; }
+
+  /* Print header */
+  .main-wrapper::before {
+    content: "Africa Energy Dashboard — Research Report";
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #003F72;
+    border-bottom: 2px solid #0071BC;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+}

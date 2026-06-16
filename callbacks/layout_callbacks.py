@@ -14,6 +14,8 @@ from data.table_builder import build_table
 from data.focus_compute import compute_focus_kpis, build_focus_charts
 from data.rankings import build_rankings
 from data.scatter_compute import build_scatter
+from data.alert_compute import compute_alerts
+from data.pool_compute import compute_pool_summaries
 
 
 def _dim_page(view: str, values: dict = None, figures: dict = None,
@@ -62,6 +64,24 @@ _VIEW_MAP = {
 
 
 def register_layout_callbacks(app):
+
+    # ── Dark mode toggle — clientside, persisted in localStorage ────────
+    app.clientside_callback(
+        """
+        function(n_clicks, is_dark) {
+            var dark = (n_clicks && n_clicks > 0) ? !is_dark : (is_dark || false);
+            if (dark) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+            return dark;
+        }
+        """,
+        Output("dark-mode", "data"),
+        Input("dark-mode-btn", "n_clicks"),
+        State("dark-mode",     "data"),
+    )
 
     # ── Sidebar toggle — clientside, no server round-trip ────────────────
     app.clientside_callback(
@@ -135,8 +155,11 @@ def register_layout_callbacks(app):
 
         if view == "home":
             mini_figures = build_mini_charts(scope, year_range)
-            content = make_overview(values, mini_figures)
+            pool_data    = compute_pool_summaries(year_range)
+            content = make_overview(values, mini_figures, pool_data=pool_data)
         else:
+            alerts  = compute_alerts(view, scope, year_range)
+            values.update(alerts)
             figures         = build_charts(view, scope, year_range)
             table_columns, table_data = build_table(view, scope, year_range)
             rankings_df     = build_rankings(view, scope, year_range)

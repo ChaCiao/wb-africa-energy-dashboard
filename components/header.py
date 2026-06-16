@@ -33,6 +33,13 @@ layout = html.Div(
                         className="export-btn",
                         n_clicks=0,
                     ),
+                    html.Button(
+                        "☀ / ☾",
+                        id="dark-mode-btn",
+                        className="dark-mode-btn",
+                        n_clicks=0,
+                        title="Toggle dark mode",
+                    ),
                 ], className="header-btn-group"),
                 width="auto",
                 className="d-flex align-items-center",

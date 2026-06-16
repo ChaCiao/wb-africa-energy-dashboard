@@ -7,6 +7,8 @@ import dash_bootstrap_components as dbc
 
 import config
 
+_COMPARE_OPTIONS = [{"label": c, "value": c} for c in config.ALL_COUNTRIES]
+
 
 _POOL_COLOR = {"SAPP": "#0071BC", "EAPP": "#27AE60", "CAPP": "#E67E22"}
 
@@ -131,4 +133,19 @@ def make_focus_page(country: str, kpis: dict, charts: dict, year_range: list):
         # ── 2×2 chart grid ─────────────────────────────────────────────
         html.P("Trend Analysis (Country vs SSA Average)", className="section-label"),
         chart_grid,
+
+        html.Hr(className="section-divider"),
+
+        # ── Country comparison ─────────────────────────────────────────
+        html.P("Compare with Another Country", className="section-label"),
+        html.Div([
+            dcc.Dropdown(
+                id="compare-dropdown",
+                options=[o for o in _COMPARE_OPTIONS if o["value"] != country],
+                placeholder="Select a country to compare…",
+                clearable=True,
+                className="compare-dropdown",
+            ),
+        ], className="compare-controls"),
+        html.Div(id="compare-output"),
     ], className="focus-content")

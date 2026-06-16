@@ -14,14 +14,23 @@ def _delta_badge(delta_info):
     elif direction == "down":
         symbol, cls = "▼", "kpi-delta kpi-delta-down"
     else:
-        return None   # flat → don't show badge
+        return None
     return html.Span(f"{symbol} {text}", className=cls)
+
+
+def _alert_badge(direction):
+    """Render a trend-alert pill for rapid 3-year change."""
+    if direction == "up":
+        return html.Span("⚠ Rapid ▲", className="kpi-alert kpi-alert-up")
+    if direction == "down":
+        return html.Span("⚠ Rapid ▼", className="kpi-alert kpi-alert-down")
+    return None
 
 
 def make_kpi_row(view: str, values: dict = None):
     """
     Build a row of 4 KPI cards for the given view.
-    values: {id: string, id+"-delta": {"text","dir"}} from compute_kpis()
+    values: {id: str, id+"-delta": {"text","dir"}, id+"-alert": "up"|"down"}
     """
     kpis   = config.VIEW_KPIS.get(view, config.VIEW_KPIS["home"])
     values = values or {}
@@ -29,20 +38,26 @@ def make_kpi_row(view: str, values: dict = None):
     cards = []
     for k in kpis:
         badge   = _delta_badge(values.get(k["id"] + "-delta"))
+        alert   = _alert_badge(values.get(k["id"] + "-alert"))
+
         value_children = [
             html.Span(values.get(k["id"], "—"), className="kpi-value-text"),
         ]
         if badge:
             value_children.append(badge)
 
+        body_children = [
+            html.P(k["label"], className="kpi-label"),
+            html.Div(value_children, id=k["id"], className="kpi-value"),
+            html.Span(k["unit"], className="kpi-unit text-muted"),
+        ]
+        if alert:
+            body_children.append(alert)
+
         cards.append(
             dbc.Col(
                 dbc.Card(
-                    dbc.CardBody([
-                        html.P(k["label"], className="kpi-label"),
-                        html.Div(value_children, id=k["id"], className="kpi-value"),
-                        html.Span(k["unit"], className="kpi-unit text-muted"),
-                    ]),
+                    dbc.CardBody(body_children),
                     className="kpi-card",
                 ),
                 md=3,

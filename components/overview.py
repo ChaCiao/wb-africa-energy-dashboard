@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 
 from components.kpi_row import make_kpi_row
 from components.africa_map import build_africa_map
+from components.pool_summary import make_pool_summary
 
 _TODAY = datetime.now().strftime("%B %d, %Y")
 
@@ -66,7 +67,7 @@ _MINI_CARDS = [
 
 # ── Public factory ────────────────────────────────────────────────────────────
 
-def make_overview(values: dict = None, mini_figures: dict = None):
+def make_overview(values: dict = None, mini_figures: dict = None, pool_data: dict = None):
     """Build the Home / Overview page with welcome box, Africa map, KPIs, and mini-charts."""
     mini_figures = mini_figures or {}
 
@@ -115,6 +116,17 @@ def make_overview(values: dict = None, mini_figures: dict = None):
             dbc.Row(
                 [dbc.Col(cards[2], md=6), dbc.Col(cards[3], md=6)],
                 className="g-3",
+            ),
+
+            # ── Power Pool summary ─────────────────────────────────────────
+            *(
+                [
+                    html.Hr(className="section-divider"),
+                    html.P("Regional Power Pools — Latest Year Snapshot",
+                           className="section-label"),
+                    make_pool_summary(pool_data),
+                ]
+                if pool_data else []
             ),
         ],
         className="overview-content",

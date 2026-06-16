@@ -9,6 +9,7 @@ from callbacks.data_callbacks import register_data_callbacks
 from callbacks.map_callbacks import register_map_callbacks
 from callbacks.history_callbacks import register_history_callbacks
 from callbacks.report_callbacks import register_report_callbacks
+from callbacks.compare_callbacks import register_compare_callbacks
 import data.loaders  # noqa: F401 – triggers CSV auto-generation on first run
 
 app = dash.Dash(
@@ -25,6 +26,7 @@ register_data_callbacks(app)
 register_map_callbacks(app)
 register_history_callbacks(app)
 register_report_callbacks(app)
+register_compare_callbacks(app)
 
 app.layout = dbc.Container(
     [
@@ -86,6 +88,7 @@ app.layout = dbc.Container(
         dcc.Store(id="selected-scope",               storage_type="session"),
         dcc.Store(id="map-click",                    storage_type="memory"),
         dcc.Store(id="country-history",   data=[],    storage_type="session"),
+        dcc.Store(id="dark-mode",         data=False, storage_type="local"),
 
         # ── URL sync ─────────────────────────────────────────────────
         dcc.Location(id="url", refresh=False),
