@@ -5,9 +5,11 @@ from components.kpi_row import make_kpi_row
 from components.chart_grid import make_chart_grid
 from components.overview import make_overview
 from components.data_table import make_data_table
+from components.focus_country import make_focus_page
 from data.kpi_compute import compute_kpis
 from data.chart_builders import build_charts, build_mini_charts
 from data.table_builder import build_table
+from data.focus_compute import compute_focus_kpis, build_focus_charts
 
 
 def _dim_page(view: str, values: dict = None, figures: dict = None,
@@ -79,12 +81,24 @@ def register_layout_callbacks(app):
             trigger = ctx.triggered[0]["prop_id"].split(".")[0]
 
             if trigger == "map-click" and map_click and map_click.get("country"):
-                view = "access"   # Focus country view (Sprint C) — access for now
+                view = "focus"
             else:
                 view = _VIEW_MAP.get(trigger, current_view or "home")
 
         def tab_cls(tab_view):
             return "dim-tab dim-tab-active" if view == tab_view else "dim-tab"
+
+        # ── Focus Country view (map click) ───────────────────────────
+        if view == "focus" and map_click and map_click.get("country"):
+            country = map_click["country"]
+            yr_min  = int(year_range[0]) if year_range else 2015
+            yr_max  = int(year_range[1]) if year_range else 2024
+            kpis    = compute_focus_kpis(country, yr_min, yr_max)
+            charts  = build_focus_charts(country, yr_min, yr_max)
+            content = make_focus_page(country, kpis, charts, year_range)
+            return (content, view,
+                    tab_cls("access"), tab_cls("economics"),
+                    tab_cls("transition"), tab_cls("institutions"))
 
         values = compute_kpis(view, scope, year_range)
 

@@ -411,3 +411,32 @@ body {
   margin-top: var(--sp-1);
   margin-bottom: 0;
 }
+
+/* ── Focus Country page ──────────────────────────────────────────────────── */
+.focus-content   { }
+.focus-header    { margin-bottom: var(--sp-4); }
+.focus-title-row { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-1); }
+.focus-pool-badge {
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 10px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.focus-country-title {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+.focus-subtitle {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+.focus-ssa-bench {
+  font-size: var(--fs-xs);
+  margin-top: var(--sp-1);
+  margin-bottom: 0;
+}
