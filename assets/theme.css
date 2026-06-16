@@ -323,20 +323,7 @@ body {
 .download-btn:active { background: var(--wb-blue-dark); }
 
 /* ── Overview page ───────────────────────────────────────────────────────── */
-.overview-content      { }
-.overview-intro-block  { margin-bottom: var(--sp-4); }
-.overview-title {
-  font-size: var(--fs-xl);
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: var(--sp-2);
-}
-.overview-intro {
-  font-size: var(--fs-base);
-  color: var(--text-secondary);
-  max-width: 680px;
-  line-height: 1.6;
-}
+.overview-content { }
 .section-label {
   font-size: var(--fs-xs);
   font-weight: 700;
@@ -344,4 +331,68 @@ body {
   letter-spacing: 0.08em;
   color: var(--text-muted);
   margin-bottom: var(--sp-3);
+}
+
+/* ── Welcome box ─────────────────────────────────────────────────────────── */
+.welcome-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #1B2A3B 0%, #0D1B2A 100%);
+  border-left: 4px solid var(--wb-yellow);
+  border-radius: var(--border-radius);
+  padding: 14px 20px;
+  margin-bottom: var(--sp-4);
+}
+.welcome-name {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+.welcome-sub {
+  font-size: var(--fs-xs);
+  color: #8A9BAC;
+  margin: 4px 0 0 0;
+  letter-spacing: 0.03em;
+}
+.welcome-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.welcome-badge {
+  background: rgba(247, 168, 0, 0.12);
+  color: var(--wb-yellow);
+  border: 1px solid rgba(247, 168, 0, 0.28);
+  border-radius: 20px;
+  padding: 3px 11px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.welcome-date {
+  font-size: var(--fs-xs);
+  color: #5A6A7A;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Africa map container ────────────────────────────────────────────────── */
+.africa-map-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 16px 16px 8px;
+  margin-bottom: var(--sp-4);
+  box-shadow: var(--card-shadow);
+}
+.africa-map-graph { display: block; }
+.map-hint {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: var(--sp-1);
+  margin-bottom: 0;
 }

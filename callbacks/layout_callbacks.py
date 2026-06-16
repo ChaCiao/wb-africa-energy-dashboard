@@ -66,16 +66,22 @@ def register_layout_callbacks(app):
         Input("tab-institutions",    "n_clicks"),
         Input("selected-scope",      "data"),
         Input("year-slider",         "value"),
+        Input("map-click",           "data"),
         State("current-view",        "data"),
     )
-    def update_view(home_n, acc_n, eco_n, tra_n, ins_n, scope, year_range, current_view):
+    def update_view(home_n, acc_n, eco_n, tra_n, ins_n,
+                    scope, year_range, map_click, current_view):
         ctx = dash.callback_context
 
         if not ctx.triggered or ctx.triggered[0]["value"] is None:
             view = current_view or "home"
         else:
             trigger = ctx.triggered[0]["prop_id"].split(".")[0]
-            view = _VIEW_MAP.get(trigger, current_view or "home")
+
+            if trigger == "map-click" and map_click and map_click.get("country"):
+                view = "access"   # Focus country view (Sprint C) — access for now
+            else:
+                view = _VIEW_MAP.get(trigger, current_view or "home")
 
         def tab_cls(tab_view):
             return "dim-tab dim-tab-active" if view == tab_view else "dim-tab"

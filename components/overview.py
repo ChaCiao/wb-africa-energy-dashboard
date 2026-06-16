@@ -1,8 +1,40 @@
+from datetime import datetime
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 from components.kpi_row import make_kpi_row
+from components.africa_map import build_africa_map
 
+_TODAY = datetime.now().strftime("%B %d, %Y")
+
+
+# ── Welcome box ───────────────────────────────────────────────────────────────
+
+def _welcome_box():
+    return html.Div(
+        [
+            html.Div(
+                [
+                    html.P("Welcome back, Wooseop", className="welcome-name"),
+                    html.P(
+                        "Private Research Workspace  ·  Sub-Saharan Africa Energy Sector",
+                        className="welcome-sub",
+                    ),
+                ],
+            ),
+            html.Div(
+                [
+                    html.Span("🔒 PRIVATE", className="welcome-badge"),
+                    html.Span(_TODAY, className="welcome-date"),
+                ],
+                className="welcome-right",
+            ),
+        ],
+        className="welcome-box",
+    )
+
+
+# ── Mini chart helpers ────────────────────────────────────────────────────────
 
 def _mini_chart_card(title, fig=None, chart_id=None):
     body = (
@@ -13,7 +45,10 @@ def _mini_chart_card(title, fig=None, chart_id=None):
             style={"height": "155px"},
         )
         if fig is not None
-        else html.Div("Select countries to load.", className="chart-placeholder chart-placeholder-sm")
+        else html.Div(
+            "Select countries to load.",
+            className="chart-placeholder chart-placeholder-sm",
+        )
     )
     return dbc.Card(dbc.CardBody([
         html.H6(title, className="chart-title"),
@@ -29,8 +64,10 @@ _MINI_CARDS = [
 ]
 
 
+# ── Public factory ────────────────────────────────────────────────────────────
+
 def make_overview(values: dict = None, mini_figures: dict = None):
-    """Build the Home / Overview page with KPIs and 2×2 mini-chart snapshot."""
+    """Build the Home / Overview page with welcome box, Africa map, KPIs, and mini-charts."""
     mini_figures = mini_figures or {}
 
     cards = [
@@ -40,21 +77,31 @@ def make_overview(values: dict = None, mini_figures: dict = None):
 
     return html.Div(
         [
-            # ── Intro ─────────────────────────────────────────────────────
+            # ── Welcome box ────────────────────────────────────────────────
+            _welcome_box(),
+
+            # ── Interactive Africa map ─────────────────────────────────────
             html.Div(
                 [
-                    html.H4("Sub-Saharan Africa Energy Overview", className="overview-title"),
+                    html.P("Sub-Saharan Africa — Coverage Map", className="section-label"),
+                    dcc.Graph(
+                        id="africa-map",
+                        figure=build_africa_map(),
+                        config={"displayModeBar": False, "scrollZoom": False},
+                        className="africa-map-graph",
+                    ),
                     html.P(
-                        "This dashboard covers energy access, economics, transition, and "
-                        "institutional quality across 13 Sub-Saharan African countries (2015–2024). "
-                        "Select a dimension tab above to explore detailed data.",
-                        className="overview-intro",
+                        "Hover for key metrics · Click a country to open its focus view",
+                        className="map-hint",
                     ),
                 ],
-                className="overview-intro-block",
+                className="africa-map-container",
             ),
 
+            html.Hr(className="section-divider"),
+
             # ── Cross-dimensional KPI row ──────────────────────────────────
+            html.P("Cross-Dimensional KPIs", className="section-label"),
             make_kpi_row("home", values),
 
             html.Hr(className="section-divider"),
@@ -74,5 +121,5 @@ def make_overview(values: dict = None, mini_figures: dict = None):
     )
 
 
-# Convenience alias used at module level (no data — shows placeholders)
+# Convenience alias used at module level (static — no live data)
 layout = make_overview()

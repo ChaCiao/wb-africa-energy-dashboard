@@ -1,5 +1,8 @@
+from datetime import datetime
 from dash import html
 import dash_bootstrap_components as dbc
+
+_LAST_UPDATED = datetime.now().strftime("%B %d, %Y")
 
 layout = html.Div(
     dbc.Row(
@@ -7,9 +10,9 @@ layout = html.Div(
             dbc.Col(
                 html.Div(
                     [
-                        html.H1("WB Africa Energy Access Dashboard", className="header-title"),
+                        html.H1("WB Africa Energy Dashboard", className="header-title"),
                         html.P(
-                            "World Bank Sub-Saharan Africa Energy Sector Analysis · 2015–2024",
+                            f"Last updated: {_LAST_UPDATED}",
                             className="header-subtitle",
                         ),
                     ],
