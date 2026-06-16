@@ -13,10 +13,11 @@ def make_chart_grid(view: str, figures: dict = None):
     figures = figures or {}
 
     def _card(label, chart_id):
-        fig = figures.get(chart_id)
+        fig    = figures.get(chart_id)
+        dom_id = {"type": "dim-chart", "index": chart_id}
         body = (
             dcc.Graph(
-                id=chart_id,
+                id=dom_id,
                 figure=fig,
                 config={"displayModeBar": False, "responsive": True},
                 className="chart-graph",
@@ -24,7 +25,7 @@ def make_chart_grid(view: str, figures: dict = None):
             if fig is not None
             else html.Div(
                 "Select countries in the sidebar to load this chart.",
-                id=chart_id,
+                id=dom_id,
                 className="chart-placeholder",
             )
         )

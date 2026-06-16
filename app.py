@@ -11,6 +11,8 @@ from callbacks.map_callbacks import register_map_callbacks
 from callbacks.history_callbacks import register_history_callbacks
 from callbacks.report_callbacks import register_report_callbacks
 from callbacks.compare_callbacks import register_compare_callbacks
+from callbacks.play_callbacks import register_play_callbacks
+from callbacks.chart_click_callbacks import register_chart_click_callbacks
 import data.loaders  # noqa: F401 – triggers CSV auto-generation on first run
 
 app = dash.Dash(
@@ -28,6 +30,8 @@ register_map_callbacks(app)
 register_history_callbacks(app)
 register_report_callbacks(app)
 register_compare_callbacks(app)
+register_play_callbacks(app)
+register_chart_click_callbacks(app)
 
 app.layout = dbc.Container(
     [
@@ -112,6 +116,9 @@ app.layout = dbc.Container(
 
         # ── URL sync ─────────────────────────────────────────────────
         dcc.Location(id="url", refresh=False),
+
+        # ── Animation interval ────────────────────────────────────────
+        dcc.Interval(id="play-interval", interval=1000, n_intervals=0, disabled=True),
 
         # ── Download targets ──────────────────────────────────────────
         dcc.Download(id="download-csv"),

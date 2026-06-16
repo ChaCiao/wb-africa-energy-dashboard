@@ -48,6 +48,11 @@ layout = html.Div(
         ),
         html.Hr(),
 
+        # ── Year Animation ────────────────────────────────────────────
+        html.Label("Animation", className="filter-label"),
+        html.Button("▶ Play", id="play-btn", className="play-btn", n_clicks=0),
+        html.Hr(),
+
         # ── Recent Countries ──────────────────────────────────────────
         html.Label("Recent Countries", className="filter-label"),
         html.Div(id="country-history-rail", className="history-rail"),

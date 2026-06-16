@@ -103,6 +103,13 @@ def _pool_latest_sum(df, col, pool, yr_min, yr_max):
     return int(latest[col].sum())
 
 
+def _tag_country_traces(fig):
+    """Post-process: add customdata=[country_name] to per-country traces for click navigation."""
+    for trace in fig.data:
+        if trace.name in config.ALL_COUNTRIES and trace.x is not None and len(trace.x) > 0:
+            trace.update(customdata=[trace.name] * len(trace.x))
+
+
 def _add_ssa_ref(fig, df, col, yr_min, yr_max, scale=1.0, unit="", decimals=1):
     """Add SSA-13 average dotted reference line to a trend figure."""
     filt = df[df["country"].isin(config.ALL_COUNTRIES) & df["year"].between(yr_min, yr_max)]
@@ -197,6 +204,7 @@ def _access_charts(countries, yr_min, yr_max, scope=None):
         yaxis=dict(**_AX, range=[0, 110], title="Access Rate (%)"),
     )
 
+    _tag_country_traces(fig_a)
     return {"chart-access-a": fig_a, "chart-access-b": fig_b}
 
 
@@ -271,6 +279,7 @@ def _economics_charts(countries, yr_min, yr_max, scope=None):
         yaxis=dict(**_AX),
     )
 
+    _tag_country_traces(fig_a)
     return {"chart-economics-a": fig_a, "chart-economics-b": fig_b}
 
 
@@ -351,6 +360,7 @@ def _transition_charts(countries, yr_min, yr_max, scope=None):
         yaxis=dict(**_AX, title="Capacity (MW)"),
     )
 
+    _tag_country_traces(fig_a)
     return {"chart-transition-a": fig_a, "chart-transition-b": fig_b}
 
 

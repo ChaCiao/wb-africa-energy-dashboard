@@ -16,40 +16,67 @@ from data.rankings import build_rankings
 from data.scatter_compute import build_scatter
 from data.alert_compute import compute_alerts
 from data.pool_compute import compute_pool_summaries
+from data.gap_compute import build_gap_chart
+from data.heatmap_compute import build_heatmap
 
 
-def _dim_page(view: str, values: dict = None, figures: dict = None,
-              table_columns=None, table_data=None,
-              rankings_df=None, scatter_fig=None):
-    analytics_row = None
+def _analytics_section(view, scatter_fig, rankings_df, gap_fig, heatmap_fig):
+    """Build the expandable analytics section below the data table."""
+    rows = []
+
+    # Row 1: scatter + rankings
     if scatter_fig is not None or (rankings_df is not None and not rankings_df.empty):
         cols = []
         if scatter_fig is not None:
             cols.append(dbc.Col(
                 dbc.Card(dbc.CardBody([
                     html.H6("Correlation Analysis", className="chart-title"),
-                    dcc.Graph(
-                        id=f"scatter-{view}",
-                        figure=scatter_fig,
-                        config={"displayModeBar": False},
-                        style={"height": "270px"},
-                    ),
-                ])),
-                md=8,
+                    dcc.Graph(id=f"scatter-{view}", figure=scatter_fig,
+                              config={"displayModeBar": False},
+                              style={"height": "270px"}),
+                ])), md=8,
             ))
         if rankings_df is not None and not rankings_df.empty:
             cols.append(dbc.Col(
                 make_rankings_table(rankings_df, view),
                 md=4 if scatter_fig is not None else 12,
             ))
-        analytics_row = dbc.Row(cols, className="g-3 mt-1")
+        rows.append(dbc.Row(cols, className="g-3 mt-1"))
 
+    # Row 2: gap chart + heatmap
+    if gap_fig is not None or heatmap_fig is not None:
+        cols2 = []
+        if gap_fig is not None:
+            cols2.append(dbc.Col(
+                dbc.Card(dbc.CardBody([
+                    html.H6("Urban–Rural Access Gap — All Countries", className="chart-title"),
+                    dcc.Graph(id="gap-chart", figure=gap_fig,
+                              config={"displayModeBar": False}),
+                ])), md=6,
+            ))
+        if heatmap_fig is not None:
+            cols2.append(dbc.Col(
+                dbc.Card(dbc.CardBody([
+                    html.H6("Heatmap: Country × Year", className="chart-title"),
+                    dcc.Graph(id="heatmap-chart", figure=heatmap_fig,
+                              config={"displayModeBar": False}),
+                ])), md=6 if gap_fig is not None else 12,
+            ))
+        rows.append(dbc.Row(cols2, className="g-3 mt-1"))
+
+    return html.Div(rows) if rows else html.Span()
+
+
+def _dim_page(view: str, values: dict = None, figures: dict = None,
+              table_columns=None, table_data=None,
+              rankings_df=None, scatter_fig=None,
+              gap_fig=None, heatmap_fig=None):
     return html.Div([
         make_kpi_row(view, values),
         html.Hr(className="section-divider"),
         make_chart_grid(view, figures),
         make_data_table(table_columns, table_data),
-        (analytics_row if analytics_row else html.Span()),
+        _analytics_section(view, scatter_fig, rankings_df, gap_fig, heatmap_fig),
     ])
 
 
@@ -176,8 +203,11 @@ def register_layout_callbacks(app):
             table_columns, table_data = build_table(view, scope, year_range)
             rankings_df     = build_rankings(view, scope, year_range)
             scatter_fig     = build_scatter(view, scope, year_range)
+            gap_fig         = build_gap_chart(scope, year_range) if view == "access" else None
+            heatmap_fig     = build_heatmap(view, year_range)
             content = _dim_page(view, values, figures, table_columns, table_data,
-                                rankings_df=rankings_df, scatter_fig=scatter_fig)
+                                rankings_df=rankings_df, scatter_fig=scatter_fig,
+                                gap_fig=gap_fig, heatmap_fig=heatmap_fig)
 
         return (
             content,

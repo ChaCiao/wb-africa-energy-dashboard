@@ -551,6 +551,23 @@ body {
 .history-btn:active { background: rgba(255,255,255,0.22); }
 .history-empty { color: var(--text-muted); font-size: var(--fs-xs); margin: 0; }
 
+/* ── Play animation button ───────────────────────────────────────────────── */
+.play-btn {
+  width: 100%;
+  background: var(--wb-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 6px 12px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  letter-spacing: 0.03em;
+}
+.play-btn:hover  { background: var(--wb-blue-dark); }
+.play-btn:active { background: #003060; }
+
 /* ── Dark mode toggle button ─────────────────────────────────────────────── */
 .dark-mode-btn {
   background: rgba(255,255,255,0.08);
