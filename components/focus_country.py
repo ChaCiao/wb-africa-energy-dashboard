@@ -11,20 +11,28 @@ import config
 _POOL_COLOR = {"SAPP": "#0071BC", "EAPP": "#27AE60", "CAPP": "#E67E22"}
 
 
-def _kpi_card(label, value, unit, ssa_value=None, color="#0071BC"):
-    """Compact KPI card with optional SSA benchmark row."""
+def _kpi_card(label, value, unit, ssa_value=None, color="#0071BC", rank=None):
+    """Compact KPI card with optional SSA benchmark row and rank badge."""
+    ssa_el = (
+        html.P(
+            [html.Span("SSA avg: ", style={"color": "#8A9BAC"}),
+             html.Span(f"{ssa_value} {unit}", style={"color": "#E67E22", "fontWeight": "600"})],
+            className="focus-ssa-bench",
+        ) if ssa_value and ssa_value != "—" else html.Span()
+    )
+    rank_el = (
+        html.Span(f"Rank {rank}", className="focus-rank-badge")
+        if rank and rank != "—" else html.Span()
+    )
     return dbc.Card(
         dbc.CardBody([
             html.P(label, className="kpi-label"),
             html.Div([
                 html.Span(value, className="kpi-value-text"),
                 html.Span(f" {unit}", className="kpi-unit"),
+                rank_el,
             ], className="kpi-value"),
-            (html.P(
-                [html.Span("SSA avg: ", style={"color": "#8A9BAC"}),
-                 html.Span(f"{ssa_value} {unit}", style={"color": "#E67E22", "fontWeight": "600"})],
-                className="focus-ssa-bench",
-            ) if ssa_value and ssa_value != "—" else html.Span()),
+            ssa_el,
         ]),
         className="kpi-card",
         style={"borderLeftColor": color},
@@ -62,11 +70,14 @@ def make_focus_page(country: str, kpis: dict, charts: dict, year_range: list):
     # KPI row
     kpi_cards = dbc.Row([
         dbc.Col(_kpi_card("Electrification Rate", kpis.get("kpi-focus-access", "—"), "%",
-                           kpis.get("ssa-access"), color="#0071BC"), md=3),
+                           kpis.get("ssa-access"), color="#0071BC",
+                           rank=kpis.get("rank-access")), md=3),
         dbc.Col(_kpi_card("Residential Tariff", kpis.get("kpi-focus-tariff", "—"), "¢/kWh",
-                           kpis.get("ssa-tariff"), color="#27AE60"), md=3),
+                           kpis.get("ssa-tariff"), color="#27AE60",
+                           rank=kpis.get("rank-tariff")), md=3),
         dbc.Col(_kpi_card("Renewable Share", kpis.get("kpi-focus-renew", "—"), "%",
-                           kpis.get("ssa-renew"), color="#1ABC9C"), md=3),
+                           kpis.get("ssa-renew"), color="#1ABC9C",
+                           rank=kpis.get("rank-renew")), md=3),
         dbc.Col(_kpi_card("Utility Ownership", kpis.get("kpi-focus-ownership", "—"), "",
                            None, color=pool_color), md=3),
     ], className="kpi-row g-3")
@@ -84,6 +95,14 @@ def make_focus_page(country: str, kpis: dict, charts: dict, year_range: list):
     ], className="g-3")
 
     return html.Div([
+        # ── Back button ────────────────────────────────────────────────
+        html.Button(
+            "← Back to Overview",
+            id="focus-back-btn",
+            className="back-btn",
+            n_clicks=0,
+        ),
+
         # ── Country header ─────────────────────────────────────────────
         html.Div(
             [

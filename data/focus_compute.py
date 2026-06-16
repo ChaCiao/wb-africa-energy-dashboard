@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 
 import config
 from data.loaders import load_access, load_tariffs, load_transition, load_institutions
+from data.rankings import country_rank
 
 _AX  = dict(gridcolor="#E8EDF2", linecolor="#D0D8E0", zeroline=False)
 _SSA = "#E67E22"
@@ -77,6 +78,14 @@ def compute_focus_kpis(country: str, yr_min: int, yr_max: int) -> dict:
 
     ownership = ins_c["utility_ownership"].iloc[0].capitalize() if not ins_c.empty else "—"
 
+    # Country rankings among all 13
+    rank_acc,  n = country_rank("access",     country, [yr_min, yr_max])
+    rank_eco,  _ = country_rank("economics",  country, [yr_min, yr_max])
+    rank_ren,  _ = country_rank("transition", country, [yr_min, yr_max])
+
+    def _rank_str(rank):
+        return f"#{rank} / {n}" if rank else "—"
+
     return {
         "kpi-focus-access":    _v(latest_acc, "access_national_pct"),
         "kpi-focus-tariff":    _v(latest_tar, "residential_usd_kwh", scale=100, dec=2),
@@ -86,6 +95,10 @@ def compute_focus_kpis(country: str, yr_min: int, yr_max: int) -> dict:
         "ssa-access":  _ssa(acc, "access_national_pct"),
         "ssa-tariff":  _ssa(tar, "residential_usd_kwh", scale=100, dec=2),
         "ssa-renew":   _ssa(tra, "renewable_share_pct"),
+        # Rankings
+        "rank-access": _rank_str(rank_acc),
+        "rank-tariff": _rank_str(rank_eco),
+        "rank-renew":  _rank_str(rank_ren),
     }
 
 

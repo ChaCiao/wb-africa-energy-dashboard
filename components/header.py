@@ -20,12 +20,20 @@ layout = html.Div(
                 ),
             ),
             dbc.Col(
-                html.Button(
-                    [html.Span("⌂ ", className="home-icon"), "Home"],
-                    id="home-btn",
-                    className="home-btn",
-                    n_clicks=0,
-                ),
+                html.Div([
+                    html.Button(
+                        [html.Span("⌂ ", className="home-icon"), "Home"],
+                        id="home-btn",
+                        className="home-btn",
+                        n_clicks=0,
+                    ),
+                    html.Button(
+                        "↓ Export Report",
+                        id="export-report-btn",
+                        className="export-btn",
+                        n_clicks=0,
+                    ),
+                ], className="header-btn-group"),
                 width="auto",
                 className="d-flex align-items-center",
             ),

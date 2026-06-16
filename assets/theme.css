@@ -440,3 +440,112 @@ body {
   margin-top: var(--sp-1);
   margin-bottom: 0;
 }
+
+/* ── Focus rank badge (inline in KPI value row) ──────────────────────────── */
+.focus-rank-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--wb-blue);
+  border-radius: 10px;
+  padding: 1px 7px;
+  margin-left: 6px;
+  white-space: nowrap;
+  align-self: center;
+}
+
+/* ── Back button ─────────────────────────────────────────────────────────── */
+.back-btn {
+  background: transparent;
+  color: var(--wb-blue);
+  border: 1px solid var(--wb-blue);
+  border-radius: var(--border-radius);
+  padding: 4px 12px;
+  font-size: var(--fs-sm);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  margin-bottom: var(--sp-4);
+  transition: background 0.15s, color 0.15s;
+}
+.back-btn:hover  { background: var(--wb-blue); color: #fff; }
+.back-btn:active { background: var(--wb-blue-dark); color: #fff; }
+
+/* ── Header button group ─────────────────────────────────────────────────── */
+.header-btn-group {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* ── Export Report button ────────────────────────────────────────────────── */
+.export-btn {
+  background: rgba(255,255,255,0.10);
+  color: var(--text-on-dark);
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: var(--border-radius);
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.export-btn:hover  { background: rgba(255,255,255,0.22); }
+.export-btn:active { background: rgba(255,255,255,0.30); }
+
+/* ── Rankings card & table ───────────────────────────────────────────────── */
+.rankings-card {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  border-radius: var(--border-radius);
+}
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.ranking-thead th {
+  background: var(--wb-blue);
+  color: #fff;
+  padding: 7px 10px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.ranking-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+.ranking-table tr:last-child td { border-bottom: none; }
+.table-note {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+/* ── History rail (sidebar) ──────────────────────────────────────────────── */
+.history-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: var(--sp-1);
+}
+.history-btn {
+  background: rgba(255,255,255,0.07);
+  color: var(--text-on-dark);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: var(--fs-xs);
+  font-family: var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.history-btn:hover  { background: rgba(255,255,255,0.15); }
+.history-btn:active { background: rgba(255,255,255,0.22); }

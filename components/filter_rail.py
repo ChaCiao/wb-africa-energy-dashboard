@@ -46,6 +46,11 @@ layout = html.Div(
             tooltip={"placement": "bottom", "always_visible": True},
             className="year-slider",
         ),
+        html.Hr(),
+
+        # ── Recent Countries ──────────────────────────────────────────
+        html.Label("Recent Countries", className="filter-label"),
+        html.Div(id="country-history-rail", className="history-rail"),
     ],
     className="filter-rail-inner",
 )
