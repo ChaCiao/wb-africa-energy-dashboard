@@ -129,4 +129,7 @@ app.layout = dbc.Container(
 )
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8050)
+    import os
+    port  = int(os.environ.get("PORT", 8050))
+    debug = os.environ.get("DASH_DEBUG", "true").lower() == "true"
+    app.run(debug=debug, host="0.0.0.0", port=port)
