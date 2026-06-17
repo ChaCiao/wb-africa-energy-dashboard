@@ -31,7 +31,8 @@ def _analytics_section(view, scatter_fig, rankings_df, gap_fig, heatmap_fig):
             cols.append(dbc.Col(
                 dbc.Card(dbc.CardBody([
                     html.H6("Correlation Analysis", className="chart-title"),
-                    dcc.Graph(id=f"scatter-{view}", figure=scatter_fig,
+                    dcc.Graph(id={"type": "dim-chart", "index": f"scatter-{view}"},
+                              figure=scatter_fig,
                               config={"displayModeBar": False},
                               style={"height": "270px"}),
                 ])), md=8,
@@ -50,7 +51,8 @@ def _analytics_section(view, scatter_fig, rankings_df, gap_fig, heatmap_fig):
             cols2.append(dbc.Col(
                 dbc.Card(dbc.CardBody([
                     html.H6("Urban–Rural Access Gap — All Countries", className="chart-title"),
-                    dcc.Graph(id="gap-chart", figure=gap_fig,
+                    dcc.Graph(id={"type": "dim-chart", "index": "gap-chart"},
+                              figure=gap_fig,
                               config={"displayModeBar": False}),
                 ])), md=6,
             ))
@@ -58,7 +60,8 @@ def _analytics_section(view, scatter_fig, rankings_df, gap_fig, heatmap_fig):
             cols2.append(dbc.Col(
                 dbc.Card(dbc.CardBody([
                     html.H6("Heatmap: Country × Year", className="chart-title"),
-                    dcc.Graph(id="heatmap-chart", figure=heatmap_fig,
+                    dcc.Graph(id={"type": "dim-chart", "index": "heatmap-chart"},
+                              figure=heatmap_fig,
                               config={"displayModeBar": False}),
                 ])), md=6 if gap_fig is not None else 12,
             ))

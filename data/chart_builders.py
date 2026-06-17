@@ -104,10 +104,29 @@ def _pool_latest_sum(df, col, pool, yr_min, yr_max):
 
 
 def _tag_country_traces(fig):
-    """Post-process: add customdata=[country_name] to per-country traces for click navigation."""
+    """Post-process: add customdata=[country_name] to per-country traces for click navigation.
+
+    Handles three layouts:
+    - Line/scatter (name == country, x = years): customdata = [country] * len(x)
+    - Vertical grouped bar (x = country list): each bar's customdata set to its x value
+    - Horizontal bar (y = country list): customdata set to y values
+    """
     for trace in fig.data:
+        # Trend / scatter traces: trace name is the country
         if trace.name in config.ALL_COUNTRIES and trace.x is not None and len(trace.x) > 0:
             trace.update(customdata=[trace.name] * len(trace.x))
+            continue
+
+        # Vertical grouped bar: x-axis holds country names
+        if (hasattr(trace, "x") and trace.x is not None
+                and any(str(v) in config.ALL_COUNTRIES for v in trace.x)):
+            trace.update(customdata=list(trace.x))
+            continue
+
+        # Horizontal bar: y-axis holds country names
+        if (hasattr(trace, "y") and trace.y is not None
+                and any(str(v) in config.ALL_COUNTRIES for v in trace.y)):
+            trace.update(customdata=list(trace.y))
 
 
 def _add_ssa_ref(fig, df, col, yr_min, yr_max, scale=1.0, unit="", decimals=1):
@@ -205,6 +224,7 @@ def _access_charts(countries, yr_min, yr_max, scope=None):
     )
 
     _tag_country_traces(fig_a)
+    _tag_country_traces(fig_b)
     return {"chart-access-a": fig_a, "chart-access-b": fig_b}
 
 
@@ -280,6 +300,7 @@ def _economics_charts(countries, yr_min, yr_max, scope=None):
     )
 
     _tag_country_traces(fig_a)
+    _tag_country_traces(fig_b)
     return {"chart-economics-a": fig_a, "chart-economics-b": fig_b}
 
 
@@ -361,6 +382,7 @@ def _transition_charts(countries, yr_min, yr_max, scope=None):
     )
 
     _tag_country_traces(fig_a)
+    _tag_country_traces(fig_b)
     return {"chart-transition-a": fig_a, "chart-transition-b": fig_b}
 
 

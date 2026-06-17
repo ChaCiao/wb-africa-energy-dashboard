@@ -72,13 +72,14 @@ def _build_scatter_fig(df, x_label, y_label, title):
                 mode="markers+text",
                 name=f"{region} Pool",
                 text=bg["country"],
+                customdata=bg["country"].tolist(),
                 textposition="top center",
                 textfont=dict(size=8, color="#8A9BAC"),
                 marker=dict(color=color, size=8, opacity=0.35,
                             line=dict(color="white", width=1)),
                 showlegend=True,
                 hovertemplate=(
-                    "<b>%{text}</b><br>"
+                    "<b>%{customdata}</b><br>"
                     f"{x_label}: %{{x}}<br>"
                     f"{y_label}: %{{y}}<br>"
                     "<extra></extra>"
@@ -93,13 +94,14 @@ def _build_scatter_fig(df, x_label, y_label, title):
                 mode="markers+text",
                 name=f"{region} (selected)",
                 text=sel["country"],
+                customdata=sel["country"].tolist(),
                 textposition="top center",
                 textfont=dict(size=9, color="#1A2332", family="Segoe UI"),
                 marker=dict(color=color, size=13, opacity=1.0,
                             line=dict(color="white", width=1.5)),
                 showlegend=False,
                 hovertemplate=(
-                    "<b>%{text}</b><br>"
+                    "<b>%{customdata}</b><br>"
                     f"{x_label}: %{{x}}<br>"
                     f"{y_label}: %{{y}}<br>"
                     "<extra></extra>"

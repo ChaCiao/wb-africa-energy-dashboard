@@ -28,10 +28,20 @@ def register_chart_click_callbacks(app):
         if not points:
             raise PreventUpdate
 
-        # customdata is set to [country_name, ...] on each country trace
-        country = points[0].get("customdata")
+        pt = points[0]
+
+        # 1st: customdata (trend charts, scatter, gap chart)
+        country = pt.get("customdata")
         if isinstance(country, list):
             country = country[0] if country else None
+
+        # 2nd: axis labels / text (bar charts, heatmap)
+        if not country or country not in config.ALL_COUNTRIES:
+            for key in ("y", "x", "text"):
+                val = pt.get(key)
+                if isinstance(val, str) and val in config.ALL_COUNTRIES:
+                    country = val
+                    break
 
         if not country or country not in config.ALL_COUNTRIES:
             raise PreventUpdate
